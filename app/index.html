@@ -3,98 +3,68 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Leonida Trophy Guide — GTA VI Platinum Roadmap</title>
-<link rel="icon" href="data:,">
+<title>Leonida Trophy Guide — GTA VI · 55 trophies, cited steps</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="masthead">
-  <div class="masthead-inner">
-    <p class="kicker">Grand Theft Auto VI &middot; PlayStation 5 &middot; Offline guide &amp; tracker</p>
+<header class="topbar">
+  <div class="brand">
     <h1>Leonida Trophy Guide</h1>
-    <p class="subtitle">All 55 official trophies — 1 platinum, 2 gold, 6 silver, 46 bronze (28 hidden on PlayStation until earned) — with a roadmap to the platinum, the missable trophies flagged, and a guide to each in our own words, with its sources.</p>
-    <div class="progress-wrap" aria-label="Platinum progress">
-      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-      <p class="progress-text"><strong id="progressCount">0 of 55 earned</strong> <span id="progressPct">0%</span> &middot; <span id="missableCount"></span> &middot; <span id="gradeCounts"></span></p>
-    </div>
-    <nav class="tabs" aria-label="Views">
-      <button type="button" class="tab is-active" data-view="checklist">Checklist</button>
-      <button type="button" class="tab" data-view="roadmap">Roadmap to Platinum</button>
-      <button type="button" class="tab" data-view="missables">Missables <span class="pill" id="missablePill">8</span></button>
-      <button type="button" class="tab" data-view="about">About &amp; sources</button>
-    </nav>
+    <p class="sub">Grand Theft Auto VI · PS5 · 55 trophies · every guide in numbered steps with sources</p>
   </div>
+  <div class="topcontrols">
+    <span class="progress" id="progressLabel">0 / 55 earned</span>
+    <button id="exportBtn" type="button">Export</button>
+    <label class="importLabel" for="importFile">Import</label>
+    <input id="importFile" type="file" accept="application/json,.json" hidden>
+    <span class="saved">Saved in this browser</span>
+    <button id="spoilerBtn" type="button" aria-pressed="false">Spoilers: shown</button>
+  </div>
+  <p class="audit" id="auditStrip">AUDIT · 55 official · 1P 2G 6S 46B · 28 hidden · 55/55 guides cite a source · 177/177 steps cited · 7 sources read 20 Nov 2026 · 1 possibly missable · 1 watch · 3 unconfirmed · 11 single-source · 4 disagree</p>
 </header>
+<nav class="tabbar" id="tabbar">
+  <button type="button" data-tab="guide" class="active">Guide &amp; tracker</button>
+  <button type="button" data-tab="roadmap">Roadmap to platinum</button>
+  <button type="button" data-tab="missables">Missables &amp; watch</button>
+  <button type="button" data-tab="sources">Source matrix</button>
+</nav>
+<div class="filterbar">
+  <input id="searchBox" type="search" placeholder="Search a trophy or mission…" aria-label="Search trophies">
+  <div class="pills" id="pillRow"></div>
+</div>
+
 <main>
-  <section id="view-checklist" class="view">
-    <div class="controls" aria-label="Filters">
-      <label class="control">Search <input id="search" type="search" placeholder="Trophy name or description…" autocomplete="off"></label>
-      <label class="control">Kind
-        <select id="kind">
-          <option value="all">All kinds</option>
-          <option value="story">Story</option>
-          <option value="missable">Missable</option>
-          <option value="collectibles">Collectibles</option>
-          <option value="activities">Activities</option>
-          <option value="side">Side strands</option>
-          <option value="crime">Crime</option>
-          <option value="world">World</option>
-          <option value="money">Money</option>
-          <option value="misc">Moments</option>
-        </select>
-      </label>
-      <label class="control">Grade
-        <select id="grade">
-          <option value="all">All grades</option>
-          <option value="platinum">Platinum</option>
-          <option value="gold">Gold</option>
-          <option value="silver">Silver</option>
-          <option value="bronze">Bronze</option>
-        </select>
-      </label>
-      <label class="check"><input id="earnedOnly" type="checkbox"> Earned only</label>
-      <label class="check"><input id="spoiler" type="checkbox"> Hide story spoilers</label>
-    </div>
-    <p class="hint" id="listHint"></p>
-    <div class="layout">
-      <ol class="trophy-list" id="trophyList"></ol>
-      <aside class="detail" id="detail" aria-label="Trophy guide"></aside>
-    </div>
+  <section id="view-guide" class="view active">
+    <aside class="checklist" id="checklist" aria-label="Trophy checklist"></aside>
+    <article class="detail" id="detail" aria-label="Trophy guide"></article>
+    <aside class="sourcecol" id="sourceCol" aria-label="Sources for this trophy"></aside>
   </section>
-  <section id="view-roadmap" class="view" hidden>
-    <h2>Roadmap to the platinum</h2>
-    <p class="lede">Seven stages, built from the official trophy descriptions. Do the missable setups during the story, while your partner and the locations are still available.</p>
-    <ol class="roadmap" id="roadmapList"></ol>
-    <h3>Tips that save a second playthrough</h3>
-    <ul class="tips" id="roadmapTips"></ul>
+
+  <section id="view-roadmap" class="view">
+    <h2>Roadmap to the platinum — about 200 hours</h2>
+    <p class="roadnote" id="roadNote"></p>
+    <div class="stages" id="stageList"></div>
   </section>
-  <section id="view-missables" class="view" hidden>
-    <h2>Missable trophies — 8 to watch for</h2>
-    <p class="lede">Chapter and mission trophies are <strong>not</strong> missable: missions can be replayed. These 8 need a one-time setup — a partner present, a specific place, a choice, or a rare event — so catch them while the setup is available.</p>
-    <ol class="trophy-list missable-list" id="missableList"></ol>
+
+  <section id="view-missables" class="view">
+    <h2>Missables, watch list &amp; unconfirmed</h2>
+    <p class="roadnote">Only one trophy is possibly missable. Every other flag from older lists was checked against the launch-day guides and cleared.</p>
+    <div class="missgrid" id="missGrid"></div>
   </section>
-  <section id="view-about" class="view" hidden>
-    <h2>About this guide</h2>
-    <p>Names, descriptions and grades are the official PlayStation 5 list, as Exophase and PSNProfiles listed it — the two agree on every name, description and grade. PSN progress targets (such as 42 Shooting Range challenges and 250 stunts) come from PSNProfiles. Every guide is written in our own words for this entry, from the official description; where a place is not pinned down by the description, the guide says so instead of inventing one.</p>
-    <h3>Sources</h3>
-    <ul>
-      <li>Exophase — the official trophy list (names, descriptions, grades)</li>
-      <li>PSNProfiles — the official trophy list and PSN progress targets</li>
-      <li>Our own advice, drawn from the official description of each trophy</li>
-    </ul>
-    <h3>Your progress</h3>
-    <p>Progress is saved in this browser (localStorage) and never leaves it. Export it to a file to back it up, and import it back on any device.</p>
-    <div class="save-row">
-      <button id="exportBtn" type="button">Export progress</button>
-      <label class="import-btn">Import progress <input id="importFile" type="file" accept="application/json,.json"></label>
-      <button id="resetBtn" type="button">Reset progress</button>
-    </div>
-    <p class="note">No online trophies: the official list holds no online trophy, so there is nothing to filter there. This guide works fully offline and makes no network request.</p>
+
+  <section id="view-sources" class="view">
+    <h2>Source matrix — 7 sources, read 20 Nov 2026</h2>
+    <p class="roadnote">Every step in every guide cites one or more of these by number. Coverage counts come from the guide data itself, not typed by hand.</p>
+    <table class="matrix" id="matrixTable">
+      <thead><tr><th>#</th><th>Source</th><th>Read</th><th>Link (text only — the app fetches nothing)</th><th>Cited by</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <p class="roadnote">Sources disagree on 4 trophies. Where they do, the guide shows both versions with both citations and picks neither: ids 7, 25, 28 and 40.</p>
   </section>
 </main>
 <footer>
-  <p>Leonida Trophy Guide — an unofficial, fan-made guide. Grand Theft Auto and GTA are trademarks of Rockstar Games; this guide uses no Rockstar logo, artwork or game screenshots. Trophy names and descriptions are shown as PlayStation publishes them.</p>
+  <p>Leonida Trophy Guide — an unofficial fan guide. Grand Theft Auto VI is by Rockstar Games; no Rockstar logo, artwork or game screenshot is used here. Trophy names and descriptions are shown as PlayStation publishes them. Guide text is written in our own words from the sources listed in the Source matrix.</p>
 </footer>
-<script type="module" src="js/main.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
