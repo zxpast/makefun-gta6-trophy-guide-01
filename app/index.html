@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leonida Trophy Guide — GTA VI, all 55 trophies</title>
+<meta name="description" content="An offline, open-source tracker and guide for all 55 Grand Theft Auto VI trophies on PlayStation 5: checklist, roadmap to the platinum, missable flags and a guide to each trophy in our own words, with sources.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="masthead-text">
+    <p class="kicker">Grand Theft Auto VI &middot; PlayStation 5 &middot; unofficial fan guide</p>
+    <h1>Leonida Trophy Guide</h1>
+    <p class="lede">Every one of the 55 trophies, with a tracker, a road to the platinum, and a guide to each in our own words. Works offline from its own files — nothing here phones home.</p>
+  </div>
+  <section class="scoreboard" aria-label="Progress">
+    <div class="ring" id="ring" role="img" aria-label="0 of 55 trophies earned">
+      <strong id="earnedCount">0</strong><span>/ 55</span>
+    </div>
+    <dl class="counts">
+      <div><dt>Platinum</dt><dd id="countPlatinum">0 / 1</dd></div>
+      <div><dt>Gold</dt><dd id="countGold">0 / 2</dd></div>
+      <div><dt>Silver</dt><dd id="countSilver">0 / 6</dd></div>
+      <div><dt>Bronze</dt><dd id="countBronze">0 / 46</dd></div>
+    </dl>
+    <p class="scoreboard-note" id="platinumNote">Earn the other 54 to take the platinum.</p>
+  </section>
+</header>
+
+<nav class="views" aria-label="Views">
+  <button type="button" id="viewGuide" class="view-tab active" aria-pressed="true">Trophy list</button>
+  <button type="button" id="viewRoadmap" class="view-tab" aria-pressed="false">Roadmap to platinum</button>
+</nav>
+
+<section class="toolbar" aria-label="Filters and progress tools">
+  <label class="field search-field">Search
+    <input id="search" type="search" placeholder="Name, mission, or keyword…" autocomplete="off">
+  </label>
+  <label class="field">Grade
+    <select id="gradeFilter">
+      <option value="all">All grades</option>
+      <option value="platinum">Platinum</option>
+      <option value="gold">Gold</option>
+      <option value="silver">Silver</option>
+      <option value="bronze">Bronze</option>
+    </select>
+  </label>
+  <label class="field">Kind
+    <select id="kindFilter">
+      <option value="all">All kinds</option>
+      <option value="story">Story</option>
+      <option value="side-quest">Side quests</option>
+      <option value="activity">Activities</option>
+      <option value="collectible">Collectibles</option>
+      <option value="robbery">Robberies</option>
+      <option value="exploration">Exploration</option>
+      <option value="completion">100% completion</option>
+      <option value="misc">Everything else</option>
+    </select>
+  </label>
+  <label class="field">Status
+    <select id="statusFilter">
+      <option value="all">Earned and missing</option>
+      <option value="earned">Earned only</option>
+      <option value="missing">Missing only</option>
+    </select>
+  </label>
+  <label class="check"><input id="missableOnly" type="checkbox"> Missable only</label>
+  <label class="check"><input id="spoilerToggle" type="checkbox" checked> Hide story spoilers</label>
+  <span class="tool-buttons">
+    <button type="button" id="exportBtn">Export progress</button>
+    <label class="import-btn">Import progress <input id="importFile" type="file" accept="application/json"></label>
+    <button type="button" id="resetBtn">Reset</button>
+  </span>
+</section>
+
+<p class="result-line" id="resultLine" aria-live="polite"></p>
+
+<main id="guideView">
+  <ol class="cards" id="cards"></ol>
+</main>
+
+<main id="roadmapView" hidden>
+  <p class="roadmap-intro">Three stages, in order. The story first — with one thing to do early — then the open world, then the checklist that ends in gold and platinum. About 200 hours at a relaxed pace, by PowerPyx’s estimate.</p>
+  <ol class="stages" id="stages"></ol>
+</main>
+
+<dialog id="detailDialog" class="detail">
+  <form method="dialog"><button class="detail-close" aria-label="Close">✕</button></form>
+  <div id="detailBody"></div>
+</dialog>
+
+<footer>
+  <p>Names and descriptions are shown as PlayStation publishes them. Guide text is written for this page, in our own words, from the sources each trophy cites — never copied. Five trophies are marked <em>not yet confirmed</em>: the cited guide has not pinned down their trigger, and this page says so rather than guessing.</p>
+  <p>Sources: the PlayStation 5 trophy list as listed by Exophase and PSNProfiles (18 Nov 2026); PowerPyx, GTA 6 Trophy Guide &amp; Roadmap; GTA Zone, GTA 6 Trophy List. This is an unofficial fan guide, not affiliated with Rockstar Games, Sony, or PlayStation. No Rockstar artwork is used.</p>
+  <p>Data: <span id="dataDate">the official 55 trophies, 2026-11-18</span>. Progress is saved only in this browser (localStorage); export it to keep a copy.</p>
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
