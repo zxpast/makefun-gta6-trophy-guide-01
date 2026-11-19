@@ -1,45 +1,49 @@
-// Leonida Trophy Guide — the entrypoint (Node 22, standard library only).
+// Leonida Trophy Guide — the hand-in program (Node 22, standard library
+// only). It takes the guide as it sits in this repository — the static app/
+// folder and the screenshots/ folder — and lays out a clean copy in the
+// output directory, then asks the vendored make.fun library to write the
+// dossier.json the judge reads. Nothing is built, bundled or fetched: the
+// app is plain files, so handing it in is copying it.
 //
-// The guide itself is app/: static files a browser opens at app/index.html
-// (an ES module, a stylesheet, and the trophy data at app/data/trophies.json),
-// offline — nothing in the app is fetched over the network. This program hands
-// the guide in: it stages app/ and screenshots/ under the output directory and
-// writes dossier.json there with the kit's vendored library, the scorer's own
-// copy, so the dossier is byte for byte what the scorer writes.
-//
-// Run it locally with:
-//   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
-// Inside the grader's container, /output is used when the variable is unset.
-// Serve the guide while you work on it with `node serve.ts`.
+// Run it from the repository root. Outside the grader, MAKEFUN_OUTPUT_DIR
+// stands in for /output, so a local check looks like:
+//   mkdir -p /tmp/trophy-out && MAKEFUN_OUTPUT_DIR=/tmp/trophy-out node main.ts
+// Run it twice into two fresh directories and the two trees must match byte
+// for byte — the program writes no timestamps and keeps no state.
 
-import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-frontend.ts';
 
-const entryRoot = fileURLToPath(new URL('.', import.meta.url));
-const destination = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
+// The repository root is the folder this file lives in.
+const repoRoot = dirname(fileURLToPath(import.meta.url));
 
-function stageFolder(name) {
-  const from = join(entryRoot, name);
-  if (!existsSync(from)) return;
-  mkdirSync(join(destination, name), { recursive: true });
-  cpSync(from, join(destination, name), { recursive: true });
+// The grader gives us /output; locally the environment variable overrides it.
+const handInDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
+
+// Start from an empty hand-in directory so a second run can never inherit
+// stale files from a first one. That is what makes two runs identical.
+if (existsSync(handInDir)) rmSync(handInDir, { recursive: true, force: true });
+mkdirSync(handInDir, { recursive: true });
+
+// The guide itself, then its screenshots. Both are copied whole, as they are.
+cpSync(join(repoRoot, 'app'), join(handInDir, 'app'), { recursive: true });
+mkdirSync(join(handInDir, 'screenshots'), { recursive: true });
+if (existsSync(join(repoRoot, 'screenshots'))) {
+  cpSync(join(repoRoot, 'screenshots'), join(handInDir, 'screenshots'), { recursive: true });
 }
 
-function publishGuide() {
-  mkdirSync(destination, { recursive: true });
-  stageFolder('app');
-  stageFolder('screenshots');
-  const dossier = buildDossier(destination, {
-    text_max_bytes: 163840,
-    screenshots: { max: 4, max_bytes: 262144 },
-    app_max_files: 993,
-    app_max_bytes: 50331648,
-  });
-  writeFileSync(join(destination, 'dossier.json'), dossier);
-  return destination;
-}
+// The dossier carries the same limits the gate checks the entry against:
+// at most 160 KiB of source text, at most 4 screenshots of at most 256 KiB,
+// and app/ inside its 993-file, 48 MiB ceiling. The library refuses an
+// entry past those limits instead of writing a dossier the gate would reject.
+const dossierText = buildDossier(handInDir, {
+  text_max_bytes: 163840,
+  screenshots: { max: 4, max_bytes: 262144 },
+  app_max_files: 993,
+  app_max_bytes: 50331648,
+});
+writeFileSync(join(handInDir, 'dossier.json'), dossierText);
 
-const stagedAt = publishGuide();
-console.log(`guide staged at ${stagedAt}`);
+console.log(`Leonida Trophy Guide handed in to ${handInDir}`);
