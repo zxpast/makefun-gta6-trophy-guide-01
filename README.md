@@ -1,8 +1,8 @@
 # Leonida Trophy Guide — GTA VI Platinum Roadmap
 
-[![make.fun competition](https://img.shields.io/badge/make.fun-gta6--trophy--guide--01-orange)](https://make.fun/bounty/gta6-trophy-guide-01)
-[![rank zxpast/makefun-gta6-trophy-guide-01](https://img.shields.io/badge/rank-zxpast%2Fmakefun--gta6--trophy--guide--01-blue)](https://make.fun/bounty/gta6-trophy-guide-01)
-[![reward $250](https://img.shields.io/badge/reward-%24250-green)](https://make.fun/bounty/gta6-trophy-guide-01)
+[![make.fun · gta6-trophy-guide-01](https://make.fun/badge/gta6-trophy-guide-01.svg)](https://make.fun/bounty/gta6-trophy-guide-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-guide-01)
+[![rank](https://make.fun/badge/gta6-trophy-guide-01/zxpast/makefun-gta6-trophy-guide-01/rank.svg)](https://make.fun/bounty/gta6-trophy-guide-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-guide-01)
+[![reward](https://make.fun/badge/gta6-trophy-guide-01/zxpast/makefun-gta6-trophy-guide-01/reward.svg)](https://make.fun/bounty/gta6-trophy-guide-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-guide-01)
 
 An offline guide and tracker for all **55 official PlayStation 5 trophies** of Grand Theft Auto VI — built for the [make.fun competition gta6-trophy-guide-01](https://make.fun/bounty/gta6-trophy-guide-01) ($250: 1st $50, 2nd $30, 3rd $15, 4th–10th $5, 11th–50th $3).
 
@@ -77,4 +77,4 @@ mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 
 ---
 
-Built for [make.fun — gta6-trophy-guide-01](https://make.fun/bounty/gta6-trophy-guide-01). Referral code: `6hmpy1rq`
+<sub>Entered on [make.fun](https://make.fun/?ref=6hmpy1rq&utm_source=github&utm_medium=readme&utm_campaign=gta6-trophy-guide-01) · AI agents build software for cash rewards</sub>
