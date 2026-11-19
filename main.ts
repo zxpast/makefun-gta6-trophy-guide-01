@@ -1,49 +1,39 @@
-// Leonida Trophy Guide — the hand-in program (Node 22, standard library
-// only). It takes the guide as it sits in this repository — the static app/
-// folder and the screenshots/ folder — and lays out a clean copy in the
-// output directory, then asks the vendored make.fun library to write the
-// dossier.json the judge reads. Nothing is built, bundled or fetched: the
-// app is plain files, so handing it in is copying it.
+// Leonida Trophy Guide — the entry program (Node 22, standard library only).
+// The guide itself is plain static files under app/: index.html opens in a
+// desktop browser and works with the network off, its trophy list and guides
+// live in app/data/trophies.json, and its roadmap in app/data/roadmap.json.
+// This program hands the guide in: it copies app/ and screenshots/ from
+// beside this file to /output and writes /output/dossier.json, the summary
+// the judge reads (the screenshots, the first load's files and bytes, and
+// the source), using the vendored make.fun library. Leave
+// vendor/makefun-frontend.ts untouched: the scorer requires dossier.json to
+// be byte for byte what its own copy of the library writes.
 //
-// Run it from the repository root. Outside the grader, MAKEFUN_OUTPUT_DIR
-// stands in for /output, so a local check looks like:
-//   mkdir -p /tmp/trophy-out && MAKEFUN_OUTPUT_DIR=/tmp/trophy-out node main.ts
-// Run it twice into two fresh directories and the two trees must match byte
-// for byte — the program writes no timestamps and keeps no state.
+// Run it outside the grader's container with MAKEFUN_OUTPUT_DIR in place
+// of /output:
+//   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 
-import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-frontend.ts';
 
-// The repository root is the folder this file lives in.
-const repoRoot = dirname(fileURLToPath(import.meta.url));
+const here = fileURLToPath(new URL('.', import.meta.url));
+const out = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 
-// The grader gives us /output; locally the environment variable overrides it.
-const handInDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
+mkdirSync(out, { recursive: true });
+cpSync(join(here, 'app'), join(out, 'app'), { recursive: true });
+mkdirSync(join(out, 'screenshots'), { recursive: true });
+if (existsSync(join(here, 'screenshots'))) cpSync(join(here, 'screenshots'), join(out, 'screenshots'), { recursive: true });
 
-// Start from an empty hand-in directory so a second run can never inherit
-// stale files from a first one. That is what makes two runs identical.
-if (existsSync(handInDir)) rmSync(handInDir, { recursive: true, force: true });
-mkdirSync(handInDir, { recursive: true });
+// The scorer's own caps (reference/gate.json): only text_max_bytes shapes the
+// bytes; the others refuse an entry the scorer would refuse (more than 4
+// screenshots or one over 256 KiB; more than 993 files and directories in
+// app/ or 48 MiB of app files — app/ counts beside /output's own 1000-entry
+// cap, its screenshots/ and dossier.json).
+writeFileSync(
+  join(out, 'dossier.json'),
+  buildDossier(out, { text_max_bytes: 163840, screenshots: { max: 4, max_bytes: 262144 }, app_max_files: 993, app_max_bytes: 50331648 }),
+);
 
-// The guide itself, then its screenshots. Both are copied whole, as they are.
-cpSync(join(repoRoot, 'app'), join(handInDir, 'app'), { recursive: true });
-mkdirSync(join(handInDir, 'screenshots'), { recursive: true });
-if (existsSync(join(repoRoot, 'screenshots'))) {
-  cpSync(join(repoRoot, 'screenshots'), join(handInDir, 'screenshots'), { recursive: true });
-}
-
-// The dossier carries the same limits the gate checks the entry against:
-// at most 160 KiB of source text, at most 4 screenshots of at most 256 KiB,
-// and app/ inside its 993-file, 48 MiB ceiling. The library refuses an
-// entry past those limits instead of writing a dossier the gate would reject.
-const dossierText = buildDossier(handInDir, {
-  text_max_bytes: 163840,
-  screenshots: { max: 4, max_bytes: 262144 },
-  app_max_files: 993,
-  app_max_bytes: 50331648,
-});
-writeFileSync(join(handInDir, 'dossier.json'), dossierText);
-
-console.log(`Leonida Trophy Guide handed in to ${handInDir}`);
+console.log(`Leonida Trophy Guide handed in to ${out}.`);
